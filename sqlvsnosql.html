@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL vs. NoSQL: The Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Slate & Amber -->
+    <!-- Application Structure Plan: A single-page, scrolling educational journey. The structure guides the user from high-level concepts (analogies) to technical details (scaling, consistency) and finally to practical application (use-case selector). This non-linear but guided flow is chosen over a simple report structure to make complex computer science topics digestible and engaging for a broad audience, facilitating learning through interaction rather than just reading. -->
+    <!-- Visualization & Content Choices: Report Info: Scaling difference -> Goal: Compare -> Viz: Interactive HTML/CSS diagram -> Interaction: User clicks buttons to see vertical vs. horizontal growth -> Justification: Visually demonstrates a complex concept simply, enhancing retention over static text. Report Info: Use Cases -> Goal: Guide -> Presentation: Dropdown selector -> Interaction: User selects a scenario, JS displays a tailored recommendation -> Justification: Provides direct, personalized value and actively engages the user in the decision-making process. All diagrams are built with HTML/CSS to avoid SVG/image dependencies and ensure fast, responsive rendering. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        .db-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .db-table th, .db-table td {
+            border: 2px solid #94a3b8; /* slate-400 */
+            padding: 8px;
+            text-align: left;
+        }
+        .db-table th {
+            background-color: #e2e8f0; /* slate-200 */
+        }
+        .json-object {
+            background-color: #1e293b; /* slate-800 */
+            color: #f8fafc; /* slate-50 */
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre;
+        }
+        .json-key { color: #60a5fa; /* blue-400 */ }
+        .json-string { color: #facc15; /* yellow-400 */ }
+        .json-number { color: #4ade80; /* green-400 */ }
+        .server-box {
+            transition: all 0.3s ease-in-out;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">SQL vs. NoSQL</h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">An interactive guide to choosing the right database for your project.</p>
+        </header>
+
+        <nav class="flex justify-center gap-4 mb-12 md:mb-20">
+            <a href="#concepts" class="bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold py-2 px-5 rounded-full shadow-sm transition-all">Core Concepts</a>
+            <a href="#scaling" class="bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold py-2 px-5 rounded-full shadow-sm transition-all">Scalability</a>
+            <a href="#use-cases" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-5 rounded-full shadow-sm transition-all">Use Cases</a>
+        </nav>
+
+        <main>
+            <section id="concepts" class="mb-16 md:mb-24 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-center mb-10 text-slate-900">Core Concepts: At a Glance</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-600">SQL: The Organizer</h3>
+                        <p class="mb-4 text-slate-600">Think of a perfectly organized spreadsheet. Everything has a predefined column and row. Data is structured, predictable, and relations are key.</p>
+                        <h4 class="font-semibold text-lg mb-2">Structure: Tables</h4>
+                        <div class="db-table text-sm">
+                            <table>
+                                <thead>
+                                    <tr><th>UserID</th><th>Username</th><th>JoinDate</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>Alice</td><td>2023-01-15</td></tr>
+                                    <tr><td>2</td><td>Bob</td><td>2023-02-20</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="font-semibold text-lg mb-2">Schema: Rigid Blueprint</h4>
+                            <p class="text-slate-600">The structure (schema) is defined before you add data. Changing it can be complex. This ensures data integrity and consistency.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <h3 class="text-2xl font-bold mb-4 text-amber-600">NoSQL: The Explorer</h3>
+                        <p class="mb-4 text-slate-600">Imagine a collection of flexible file folders (documents). Each folder can hold different types of information. It's adaptable and great for diverse data.</p>
+                        <h4 class="font-semibold text-lg mb-2">Structure: Documents (JSON)</h4>
+                        <div class="json-object text-sm">
+{
+  "<span class="json-key">_id</span>": <span class="json-number">1</span>,
+  "<span class="json-key">username</span>": "<span class="json-string">Alice</span>",
+  "<span class="json-key">joinDate</span>": "<span class="json-string">2023-01-15</span>",
+  "<span class="json-key">interests</span>": ["<span class="json-string">cycling</span>", "<span class="json-string">reading</span>"]
+}
+                        </div>
+                         <div class="mt-4">
+                            <h4 class="font-semibold text-lg mb-2">Schema: Dynamic Blueprint</h4>
+                            <p class="text-slate-600">The structure is flexible. You can add new fields to documents as you go, making it easy to evolve your application.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="scaling" class="mb-16 md:mb-24 scroll-mt-20">
+                <h2 class="text-3xl font-bold text-center mb-10 text-slate-900">How They Grow: An Interactive Look at Scaling</h2>
+                 <p class="text-center text-slate-600 max-w-2xl mx-auto mb-10">Databases need to grow as your application gets more popular. SQL and NoSQL handle this growth in fundamentally different ways. Click the buttons to see how.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                     <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 text-center">
+                        <h3 class="text-2xl font-bold mb-2 text-blue-600">SQL: Vertical Scaling (Scale Up)</h3>
+                        <p class="text-slate-600 mb-6">Make one server more powerful.</p>
+                        <div id="vertical-scaling-container" class="h-48 flex justify-center items-end mb-6">
+                            <div id="sql-server" class="server-box bg-blue-500 rounded-t-md" style="width: 80px; height: 80px;"></div>
+                        </div>
+                        <button id="scale-up-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-all">Add Power (RAM/CPU)</button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200 text-center">
+                        <h3 class="text-2xl font-bold mb-2 text-amber-600">NoSQL: Horizontal Scaling (Scale Out)</h3>
+                         <p class="text-slate-600 mb-6">Distribute the load across many servers.</p>
+                        <div id="horizontal-scaling-container" class="h-48 flex justify-center items-end gap-2 mb-6">
+                            <div class="server-box bg-amber-500 rounded-md" style="width: 50px; height: 50px;"></div>
+                        </div>
+                        <button id="scale-out-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-full transition-all">Add Server</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="use-cases" class="mb-16 md:mb-24 scroll-mt-20 bg-white p-8 rounded-lg shadow-xl border border-slate-200">
+                <h2 class="text-3xl font-bold text-center mb-4 text-slate-900">Which Database Fits Your Project?</h2>
+                <p class="text-center text-slate-600 max-w-2xl mx-auto mb-8">Every project has unique needs. Select a use case below to see a recommendation and understand why one database might be a better fit than the other.</p>
+
+                <div class="max-w-xl mx-auto">
+                    <label for="use-case-selector" class="block mb-2 font-semibold text-slate-700">Select a project type:</label>
+                    <select id="use-case-selector" class="w-full p-3 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all">
+                        <option value="">-- Choose an example --</option>
+                        <option value="ecommerce">E-commerce Store</option>
+                        <option value="social_media">Social Media Feed</option>
+                        <option value="banking">Financial/Banking Application</option>
+                        <option value="iot">IoT Sensor Data Collection</option>
+                        <option value="cms">Content Management System (CMS)</option>
+                    </select>
+                </div>
+                
+                <div id="recommendation-box" class="mt-8 max-w-3xl mx-auto bg-slate-50 p-6 rounded-lg min-h-[180px] border border-slate-200 transition-opacity duration-500">
+                    <div id="recommendation-content" class="text-center text-slate-500">
+                        <p>Your recommendation will appear here...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="summary-table" class="mb-16 md:mb-24">
+                 <h2 class="text-3xl font-bold text-center mb-10 text-slate-900">Final Showdown: A Summary</h2>
+                 <div class="overflow-x-auto">
+                    <table class="w-full max-w-4xl mx-auto bg-white shadow-md rounded-lg border border-slate-200">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="p-4 font-semibold text-left">Feature</th>
+                                <th class="p-4 font-semibold text-left text-blue-600">SQL</th>
+                                <th class="p-4 font-semibold text-left text-amber-600">NoSQL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-slate-200">
+                                <td class="p-4 font-medium">Data Structure</td>
+                                <td class="p-4">Tables with rows and columns</td>
+                                <td class="p-4">Documents, key-value, graph, etc.</td>
+                            </tr>
+                            <tr class="border-t border-slate-200 bg-slate-50">
+                                <td class="p-4 font-medium">Schema</td>
+                                <td class="p-4">Rigid, pre-defined</td>
+                                <td class="p-4">Dynamic and flexible</td>
+                            </tr>
+                            <tr class="border-t border-slate-200">
+                                <td class="p-4 font-medium">Scaling</td>
+                                <td class="p-4">Vertical (Scale Up)</td>
+                                <td class="p-4">Horizontal (Scale Out)</td>
+                            </tr>
+                             <tr class="border-t border-slate-200 bg-slate-50">
+                                <td class="p-4 font-medium">Consistency</td>
+                                <td class="p-4">ACID (High Consistency)</td>
+                                <td class="p-4">BASE (High Availability)</td>
+                            </tr>
+                            <tr class="border-t border-slate-200">
+                                <td class="p-4 font-medium">Best For</td>
+                                <td class="p-4">Complex queries, transactional data</td>
+                                <td class="p-4">Big data, unstructured data, scalability</td>
+                            </tr>
+                            <tr class="border-t border-slate-200 bg-slate-50">
+                                <td class="p-4 font-medium">Examples</td>
+                                <td class="p-4">MySQL, PostgreSQL, MS SQL Server</td>
+                                <td class="p-4">MongoDB, Redis, Cassandra, Neo4j</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                 </div>
+            </section>
+        </main>
+        
+        <footer class="text-center text-slate-500 pt-8 border-t border-slate-200">
+            <p>By Renaudh Gautam</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scaleUpBtn = document.getElementById('scale-up-btn');
+            const sqlServer = document.getElementById('sql-server');
+            let sqlServerHeight = 80;
+
+            scaleUpBtn.addEventListener('click', () => {
+                sqlServerHeight = sqlServerHeight >= 180 ? 80 : sqlServerHeight + 20;
+                sqlServer.style.height = `${sqlServerHeight}px`;
+            });
+
+            const scaleOutBtn = document.getElementById('scale-out-btn');
+            const horizontalContainer = document.getElementById('horizontal-scaling-container');
+            let serverCount = 1;
+
+            scaleOutBtn.addEventListener('click', () => {
+                if (serverCount >= 5) {
+                    horizontalContainer.innerHTML = '';
+                    serverCount = 0;
+                }
+                const newServer = document.createElement('div');
+                newServer.className = 'server-box bg-amber-500 rounded-md';
+                newServer.style.width = '50px';
+                newServer.style.height = '50px';
+                horizontalContainer.appendChild(newServer);
+                serverCount++;
+            });
+
+            const useCaseSelector = document.getElementById('use-case-selector');
+            const recommendationContent = document.getElementById('recommendation-content');
+            
+            const recommendations = {
+                ecommerce: {
+                    db: 'SQL',
+                    color: 'text-blue-600',
+                    reason: 'An e-commerce store requires high consistency for transactions (orders, payments, inventory). SQL\'s ACID properties ensure that these operations are reliable and data integrity is maintained.'
+                },
+                social_media: {
+                    db: 'NoSQL',
+                    color: 'text-amber-600',
+                    reason: 'Social media involves huge amounts of unstructured data (posts, images, comments) and requires high availability and horizontal scalability to serve millions of users. A NoSQL document store is ideal.'
+                },
+                banking: {
+                    db: 'SQL',
+                    color: 'text-blue-600',
+                    reason: 'Financial applications demand the highest level of data integrity and consistency. SQL databases are the industry standard due to their transactional reliability (ACID compliance).'
+                },
+                iot: {
+                    db: 'NoSQL',
+                    color: 'text-amber-600',
+                    reason: 'IoT devices generate massive volumes of high-velocity data. NoSQL databases are built to handle this scale and write-heavy workload, offering the performance and flexibility needed.'
+                },
+                cms: {
+                    db: 'NoSQL',
+                    color: 'text-amber-600',
+                    reason: 'A Content Management System deals with varied and semi-structured content (articles, blogs, media). A NoSQL document database provides the flexibility to store diverse content types easily.'
+                }
+            };
+
+            useCaseSelector.addEventListener('change', (event) => {
+                const selectedValue = event.target.value;
+                recommendationContent.style.opacity = 0;
+
+                setTimeout(() => {
+                    if (selectedValue && recommendations[selectedValue]) {
+                        const data = recommendations[selectedValue];
+                        recommendationContent.innerHTML = `
+                            <h3 class="text-xl font-bold mb-2">Recommendation: <span class="${data.color}">${data.db}</span></h3>
+                            <p class="text-slate-700">${data.reason}</p>
+                        `;
+                    } else {
+                        recommendationContent.innerHTML = `<p class="text-slate-500">Your recommendation will appear here...</p>`;
+                    }
+                    recommendationContent.classList.add('fade-in');
+                    recommendationContent.style.opacity = 1;
+                }, 300);
+                 recommendationContent.classList.remove('fade-in');
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
